@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardianNet | Safer Social Ecosystem</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo i {
+            color: var(--primary);
+            -webkit-text-fill-color: initial; 
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-main);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* --- Main Layout --- */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 2rem;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .menu-item i {
+            width: 20px;
+            color: var(--primary);
+        }
+
+        /* --- News Feed / Trending (Right Side) --- */
+        .trending-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .trending-item:last-child { border-bottom: none; }
+        
+        .trending-tag { font-size: 0.8rem; color: var(--secondary); margin-bottom: 0.2rem; }
+        .trending-head { font-size: 0.95rem; font-weight: 600; line-height: 1.4; }
+        .trending-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+        /* --- Center Content (The Analysis Tools) --- */
+        .center-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-banner p { color: var(--text-muted); }
+
+        /* --- The Dual Analysis Grid --- */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .analysis-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .icon-news { background: rgba(99, 102, 241, 0.2); color: var(--primary); }
+        .icon-hate { background: rgba(236, 72, 153, 0.2); color: var(--secondary); }
+
+        .card-title h3 { font-size: 1.1rem; font-weight: 600; }
+        .card-title p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- Forms --- */
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        textarea, select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        textarea { height: 150px; }
+
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .select-wrapper::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        select { appearance: none; cursor: pointer; }
+        select option { background: var(--bg-dark); }
+
+        .btn-analyze {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: auto; /* Pushes button to bottom */
+        }
+
+        .btn-news {
+            background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-hate {
+            background: linear-gradient(135deg, var(--secondary) 0%, #f472b6 100%);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* --- Results Section --- */
+        .result-badge {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .res-safe {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        .res-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        
+        .res-warning {
+             background: rgba(245, 158, 11, 0.1);
+             border-color: rgba(245, 158, 11, 0.3);
+             color: #fbbf24;
+        }
+
+        .res-content {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .res-icon { font-size: 1.5rem; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Feed Posts (Visuals) --- */
+        .feed-post {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .post-avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: #333;
+            background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix');
+        }
+        
+        .post-info h4 { font-size: 0.95rem; }
+        .post-info span { font-size: 0.8rem; color: var(--text-muted); }
+        
+        .post-content-box {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 200px 1fr; }
+            .right-sidebar { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .main-container { grid-template-columns: 1fr; padding: 1rem; }
+            .left-sidebar { display: none; }
+            .analysis-grid { grid-template-columns: 1fr; }
+            .navbar { padding: 1rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            GuardianNet
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-magnifying-glass-chart"></i> Verify</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-users"></i> Community</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i> Alerts</a>
+        </div>
+        <div class="user-profile">
+            <span style="font-size: 0.9rem; color: var(--text-muted);">Welcome, User</span>
+            <div class="avatar">U</div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar">
+            <div class="sidebar-card">
+                <div class="menu-item"><i class="fa-solid fa-newspaper"></i> News Feed</div>
+                <div class="menu-item"><i class="fa-solid fa-check-double"></i> Fact Checks</div>
+                <div class="menu-item"><i class="fa-solid fa-user-shield"></i> Safety Tools</div>
+                <div class="menu-item"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+                <div class="menu-item"><i class="fa-solid fa-gear"></i> Settings</div>
+            </div>
+
+            <div class="sidebar-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); border-color: rgba(16, 185, 129, 0.2);">
+                <div class="sidebar-title" style="color: var(--success);"><i class="fa-solid fa-circle-check"></i> System Status</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                    AI Models: <strong>Active</strong><br>
+                    Latency: <strong>24ms</strong><br>
+                    Daily Scans: <strong>1,420</strong>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTER CONTENT (ANALYSIS) -->
+        <main class="center-feed">
+            
+            <div class="hero-banner">
+                <h1>Verify Before You Trust</h1>
+                <p>GuardianNet uses advanced AI to detect misinformation and toxicity in real-time.</p>
+            </div>
+
+            <!-- DUAL ANALYSIS SECTION -->
+            <div class="analysis-grid">
+                
+                <!-- 1. FAKE NEWS DETECTOR -->
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <div class="card-icon icon-news">
+                            <i class="fa-regular fa-newspaper"></i>
+                        </div>
+                        <div class="card-title">
+                            <h3>Fake News Detector</h3>
+                            <p>Verify article authenticity</p>
+                        </div>
+                    </div>
+
+                    <form action="/predict" method="post" style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div class="form-group">
+                            <label>Select AI Model</label>
+                            <div class="select-wrapper">
+                                <select name="model_selector" id="model_selector">
+                                    <option value="bert" {% if model_selected == 'bert' %}selected{% endif %}>🤖 BERT (Deep Learning - Recommended)</option>
+                                    <option value="gb" {% if model_selected == 'gb' %}selected{% endif %}>⚡ Gradient Boosting (Fast)</option>
+                                    <option value="lr" {% if model_selected == 'lr' %}selected{% endif %}>📊 Logistic Regression</option>
+                                    <option value="dt" {% if model_selected == 'dt' %}selected{% endif %}>🌳 Decision Tree</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="flex-grow: 1;">
+                            <label>Article Content</label>
+                            <textarea name="news_text" placeholder="Paste the news headline or body text here..." required>{{ news_text or '' }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn-analyze btn-news">
+                            <i class="fa-solid fa-magnifying-glass"></i> Analyze Truth
+                        </button>
+                    </form>
+
+                    <!-- JINJA RESULT LOGIC FOR NEWS -->
+                    {% if prediction_text %}
+                    <div class="result-badge {% if prediction_class == 'real-news' %}res-safe{% else %}res-danger{% endif %}">
+                        <div class="res-icon">
+                            {% if prediction_class == 'real-news' %}<i class="fa-solid fa-shield-check"></i>{% else %}<i class="fa-solid fa-triangle-exclamation"></i>{% endif %}
+                        </div>
+                        <div class="res-content">
+                            {{ prediction_text }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- 2. HATE SPEECH DETECTOR -->
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <div class="card-icon icon-hate">
+                            <i class="fa-solid fa-user-slash"></i>
+                        </div>
+                        <div class="card-title">
+                            <h3>Toxicity Monitor</h3>
+                            <p>Detect cyberbullying & hate</p>
+                        </div>
+                    </div>
+
+                    <form action="/predict_hate" method="post" style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div class="form-group" style="flex-grow: 1;">
+                            <label>Comment or Post Content</label>
+                            <textarea name="hate_text" placeholder="Paste social media comments or messages here..." required style="height: 236px;">{{ hate_text or '' }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn-analyze btn-hate">
+                            <i class="fa-solid fa-filter"></i> Check Toxicity
+                        </button>
+                    </form>
+
+                    <!-- JINJA RESULT LOGIC FOR HATE -->
+                    {% if hate_prediction_text %}
+                    <div class="result-badge {% if hate_prediction_class == 'no-hate' %}res-safe{% elif hate_prediction_class == 'hate' %}res-danger{% else %}res-warning{% endif %}">
+                        <div class="res-icon">
+                            {% if hate_prediction_class == 'no-hate' %}
+                                <i class="fa-regular fa-face-smile"></i>
+                            {% elif hate_prediction_class == 'hate' %}
+                                <i class="fa-solid fa-ban"></i>
+                            {% else %}
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                            {% endif %}
+                        </div>
+                        <div class="res-content">
+                            {{ hate_prediction_text }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- VISUAL FEED DEMO -->
+            <div style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--text-muted); font-size: 1.1rem;">Live Feed Verification Demo</h3>
+                
+                <!-- Mock Post 1 -->
+                <div class="feed-post">
+                    <div class="post-header">
+                        <div class="post-avatar"></div>
+                        <div class="post-info">
+                            <h4>NewsCycle Global <i class="fa-solid fa-circle-check" style="color: #3b82f6;"></i></h4>
+                            <span>2 hours ago • Public</span>
+                        </div>
+                    </div>
+                    <div class="post-content-box">
+                        <p style="margin-bottom: 0.5rem;"><strong>Tech Giants announce new collaboration for AI safety protocols starting 2026.</strong></p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">The initiative aims to standardize ethical guidelines across the industry...</p>
+                    </div>
+                    <div style="display: flex; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                        <span style="color: var(--success); font-size: 0.9rem;"><i class="fa-solid fa-check"></i> Verified Real by GuardianNet</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- RIGHT SIDEBAR (TRENDING) -->
+        <aside class="right-sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-title">Trending Analysis</div>
+                
+                <div class="trending-item">
+                    <div class="trending-tag">#DeepFakes</div>
+                    <div class="trending-head">New detection algorithm for AI video generation</div>
+                    <div class="trending-meta">12k scans today</div>
+                </div>
+
+                <div class="trending-item">
+                    <div class="trending-tag">#CyberSafety</div>
+                    <div class="trending-head">Rise in phishing attacks via DM</div>
+                    <div class="trending-meta">8.5k scans today</div>
+                </div>
+
+                <div class="trending-item">
+                    <div class="trending-tag">#FactCheck</div>
+                    <div class="trending-head">Global warming data misconceptions viral</div>
+                    <div class="trending-meta">22k scans today</div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-title">Who to follow</div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div style="width: 30px; height: 30px; background: #555; border-radius: 50%;"></div>
+                    <div style="font-size: 0.9rem;">CyberSecurity Daily</div>
+                    <button style="margin-left: auto; background: var(--primary); border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">+</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 30px; height: 30px; background: #555; border-radius: 50%;"></div>
+                    <div style="font-size: 0.9rem;">FactCheck.org</div>
+                    <button style="margin-left: auto; background: var(--primary); border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">+</button>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>
